@@ -17,7 +17,7 @@ public class HomeController
     @GetMapping("/")
     public String index(Model model){
         model.addAttribute("films", repository.findAll());
-        return "film";
+        return "films";
     }
 
 }
