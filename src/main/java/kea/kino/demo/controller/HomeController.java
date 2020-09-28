@@ -2,7 +2,9 @@ package kea.kino.demo.controller;
 
 import kea.kino.demo.repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.w3c.dom.stylesheets.LinkStyle;
 
 @Controller
