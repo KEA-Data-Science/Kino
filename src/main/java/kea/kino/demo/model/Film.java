@@ -1,9 +1,7 @@
 package kea.kino.demo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Film
@@ -15,6 +13,9 @@ public class Film
     private String title;
     private int playTime;
     private String category;
+
+    @ManyToMany
+    Set<Actor> actors;
 
     public Film(int id, String title, int playTime, String category)
     {
