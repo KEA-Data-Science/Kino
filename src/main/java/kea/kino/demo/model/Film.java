@@ -16,16 +16,15 @@ public class Film
     private int playTime;
     private String category;
 
-    public Film(int id, String title, int playTime,String category){
+    public Film(int id, String title, int playTime, String category)
+    {
         this.id = id;
         this.title = title;
         this.playTime = playTime;
         this.category = category;
     }
 
-    public Film()
-    {
-    }
+    public Film(){ }
 
     public int getId()
     {
@@ -67,6 +66,6 @@ public class Film
         this.category = category;
     }
     /* list of actors - hvordan skal vi repræsentere dette?
-    * @OneToMany
-    * */
+     * @OneToMany
+     * */
 }
