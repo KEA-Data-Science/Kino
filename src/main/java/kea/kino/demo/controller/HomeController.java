@@ -10,14 +10,17 @@ import org.w3c.dom.stylesheets.LinkStyle;
 @Controller
 public class HomeController
 {
-
     @Autowired
-    FilmRepository repository;
+    private FilmRepository repository;
 
     @GetMapping("/")
-    public String index(Model model){
+    public String index(Model model)
+    {
         model.addAttribute("films", repository.findAll());
-        return "films1";
+        return "film";
     }
 
+    public FilmRepository getRepository(){ return repository; }
+
+    public void setRepository(FilmRepository repository){ this.repository = repository; }
 }
