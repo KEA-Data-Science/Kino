@@ -14,6 +14,16 @@ public class Film
     private int playTime;
     private String category;
 
+    public Set<Actor> getActors()
+    {
+        return actors;
+    }
+
+    public void setActors(Set<Actor> actors)
+    {
+        this.actors = actors;
+    }
+
     @ManyToMany
     Set<Actor> actors;
 

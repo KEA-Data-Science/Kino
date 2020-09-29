@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,7 +27,7 @@ class HomeControllerTest
         repository = mock(FilmRepository.class);
         model = mock(Model.class);
         homeController = new HomeController();
-        homeController.setRepository(repository);
+        homeController.setFilmRepository(repository);
         // Prepare Method Responses
         when(repository.findAll()).thenReturn(new ArrayList<Film>()); /* mock repository call */
     }
