@@ -11,6 +11,16 @@ public class Actor {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    public Set<Film> getFilms()
+    {
+        return films;
+    }
+
+    public void setFilms(Set<Film> films)
+    {
+        this.films = films;
+    }
+
     @ManyToMany (mappedBy = "actors")
     Set<Film> films;
 
