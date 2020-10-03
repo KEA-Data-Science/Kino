@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang='en' xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset='utf-8' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1>🎞 Kino 🎞 🎞 🎞🎞</h1>
+    </div>
+</div>
+<div class="container">
+    <div style="display: table;">
+        <div style="width: 100%; height: 1000%; display: table-row;">
+            <div id='calendar' style="display: table-cell; width: 1500px; height: 650px"></div>
+            <div class="container" style="background-color: red; display: table-cell;"><button> Klik her</button></div>
+        </div>
+    </div>
+</div>
+
+<script>0</script>
+<script th:inline="javascript">
+    var calendar;
+    /*
+    var message = [[${bookings}]];
+    alert(message.length);*/
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            eventDidMount: function (info) {
+                /*info.el.innerHTML = info.el.innerHTML +"<br>"+ message[info.event.id].film.category;
+                console.log(info.event.id)*/
+                $(info.el).append( "Genre: " + message[info.event.id].film.category);
+                $(info.el).append("<br/>" + "Play time: " + message[info.event.id].film.playTime);
+                $(info.el).append("<br/>" + "<button onclick='showAlert(" + info.event.id +")'> Choose </button>");
+
+
+
+            }
+        });
+        /*for (var i = 0; i < message.length; i++)
+        {
+            alert(i);
+            calendar.addEvent({title : message[i].film.title,
+                date :  message[i].date,  display : "list-item}", id : i});
+            console.log(message[i].date);
+        }
+        */
+        calendar.render();
+
+    });
+
+</script>
+</body>
+</html>
