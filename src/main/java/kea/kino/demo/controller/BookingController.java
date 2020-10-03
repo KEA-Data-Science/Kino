@@ -35,22 +35,28 @@ public class BookingController
     /* Create */
     @PostMapping("/**1")
     public String createBooking(@ModelAttribute Booking newBooking,
-            @ModelAttribute Date date,
-            @ModelAttribute int hour,
-            @ModelAttribute int minute,
+                                @ModelAttribute Date date,
+                                @ModelAttribute int hour,
+                                @ModelAttribute int minute,
 
-            Model model)
+                                Model model)
     {
-
-        Timestamp stamp = assembleTimeStamp(date,hour,minute);
-
-
+        Timestamp stamp = assembleTimeStamp(date, hour, minute);
         /* update timestamp */
         newBooking.setShowTime(stamp);
-
         Booking createdBooking = bookingRepository.save(newBooking);
         model.addAttribute("createdBooking", createdBooking); // saved booking brought along for verification;
         return "**1";
+    }
+
+    private Timestamp assembleTimeStamp(Date date, int hour, int minute)
+    {
+
+        int earlyYear = date.toLocalDate().getYear();
+        int earlyMonth = date.toLocalDate().getMonthValue();
+        int earlyDayOfMonth = date.toLocalDate().getDayOfMonth();
+
+        return Timestamp.valueOf(LocalDateTime.of(earlyYear, earlyMonth, earlyDayOfMonth, hour, minute));
     }
 
     /* Read */
@@ -77,26 +83,26 @@ public class BookingController
         /* if no name supplied, search only for dates */
         if(customerName.length() < 1)
         {
-            bookings = bookingRepository.findBookingsByShowTimeBetween(earlyStamp,laterStamp);
+            bookings = bookingRepository.findBookingsByShowTimeBetween(earlyStamp, laterStamp);
+        } else
+        {
+            bookings = bookingRepository.findBookingsByCustomerNameContainingAndShowTimeBetween(customerName,
+                                                                                                earlyStamp, laterStamp);
         }
 
-        bookings = bookingRepository.findBookingsByCustomerNameContainingAndShowTimeBetween(customerName,
-                                                                                            earlyStamp, laterStamp);
 
         return "**2";
     }
 
-    private Timestamp assembleTimeStamp(Date date, int hour, int minute)
-    {
-        int earlyYear = date.toLocalDate().getYear();
-        int earlyMonth = date.toLocalDate().getMonthValue();
-        int earlyDayOfMonth = date.toLocalDate().getDayOfMonth();
-
-        return Timestamp.valueOf(LocalDateTime.of(earlyYear, earlyMonth, earlyDayOfMonth, hour, minute));
-    }
+    /* Update */
 
     /* Read All */
-    
-    /* Update */
+    @GetMapping("/**1")
+    public String displayAllBookings(Model model)
+    {
+        model.addAttribute("bookings", bookingRepository.findAll());
+        return "**1";
+    }
+
 
 }
