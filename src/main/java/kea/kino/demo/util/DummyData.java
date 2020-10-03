@@ -59,7 +59,17 @@ public class DummyData
 //
 //        /* dummy data */
         createBooking("Peter Plum",0,0,1,true,1,film5.getId());
-        createBooking("Sudan Olé",1,15,1,true,1,film8.getId());
+        createBooking("Sudan Olé",1,15,1,true,1,2);
+        createBooking("Slomhmana McGretschen",1,15,1,true,1,3);
+        createBooking("Bent Henrik",1,15,1,true,1,3);
+        createBooking("Svend Fenrik",2,15,1,false,1,3);
+        createBooking("Tolouse Emma",3,15,1,false,1,4);
+        createBooking("Poul Nellike",2,15,1,false,1,4);
+        createBooking("Solomon Poulsen",2,15,1,true,1,4);
+        createBooking("Astrid Lindgren",1,0,1,true,1,5);
+        createBooking("Almone Svendsen",3,0,1,false,1,6);
+        createBooking("Casper Blodtud",1,15,1,true,1,7);
+        createBooking("Sudan Olé",3,15,1,true,1,2);
 
     }
 
@@ -93,18 +103,23 @@ public class DummyData
                                int numberOfSeats,
                               int filmID)
     {
-        Optional<Film> film = filmRepository.findById(filmID);
+        Optional<Film> maybeFilm = filmRepository.findById(filmID);
 
-
-        Booking booking =
-                new Booking(0,customerName,
-                        Timestamp.valueOf(
-                                LocalDateTime.now().plusHours(hour).minusMinutes(minute)),
-                            showRoom,
-                            paid,
-                            numberOfSeats,
-                            film.get());
-//        bookingRepository.save(booking);
+        if(maybeFilm.isPresent())
+        {
+            Booking booking =
+                    new Booking(0, customerName,
+                                Timestamp.valueOf(
+                                        LocalDateTime.now().plusHours(hour).minusMinutes(minute)),
+                                showRoom,
+                                paid,
+                                numberOfSeats,
+                                null);
+            booking.setFilm(maybeFilm.get());
+            bookingRepository.save(booking);
+        }else{
+            System.out.println("Film was not present.");
+        }
     }
 
 }
