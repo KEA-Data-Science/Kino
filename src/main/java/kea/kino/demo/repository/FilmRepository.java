@@ -2,6 +2,7 @@ package kea.kino.demo.repository;
 
 import kea.kino.demo.model.Actor;
 import kea.kino.demo.model.Film;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

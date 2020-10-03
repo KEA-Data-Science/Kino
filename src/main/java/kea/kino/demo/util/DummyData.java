@@ -85,7 +85,11 @@ public class DummyData
         film.setDuration(playTime);
         film.setActors(actorsSet);
 
-        return filmRepository.save(film);
+        System.out.println(film.toString());
+
+        Film saved = filmRepository.save(film);
+        System.out.println(saved);
+        return saved;
     }
 
     private Actor createActor(String name)

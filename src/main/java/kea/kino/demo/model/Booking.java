@@ -107,4 +107,18 @@ public class Booking
     {
         this.paid = paid;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Booking{" +
+//               "film=" + getFilm() +
+               ", showTime=" + showTime +
+               ", id=" + id +
+               ", showRoom=" + showRoom +
+               ", customerName='" + customerName + '\'' +
+               ", numberOfSeats=" + numberOfSeats +
+               ", paid=" + paid +
+               '}';
+    }
 }

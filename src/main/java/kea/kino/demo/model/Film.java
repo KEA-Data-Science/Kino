@@ -10,7 +10,7 @@ public class Film
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
 
-    @ManyToMany(mappedBy = "playedIn")
+    @ManyToMany(mappedBy = "films")
     public Set<Actor> actors;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "film")
@@ -83,4 +83,17 @@ public class Film
         this.category = category;
     }
 
+    @Override
+    public String toString()
+    {
+        return "Film{" +
+               "id=" + id +
+               ", actors=" + actors +
+//               ", bookings=" + bookings +
+               ", title='" + title + '\'' +
+               ", duration=" + duration +
+               ", category='" + category + '\'' +
+               ", visibleOnSite=" + visibleOnSite +
+               '}';
+    }
 }

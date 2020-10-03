@@ -1,5 +1,6 @@
 package kea.kino.demo.controller;
 
+import kea.kino.demo.model.Film;
 import kea.kino.demo.repository.ActorRepository;
 import kea.kino.demo.repository.BookingRepository;
 import kea.kino.demo.repository.FilmRepository;
@@ -8,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.ArrayList;
+
 /**
  * Home controller handles requests for pages immediately available to cinema goers/customers
  * */
@@ -26,7 +30,12 @@ public class HomeController
     @GetMapping("/")
     public String index(Model model)
     {
-        model.addAttribute("films", filmRepository.findAll());
+        Iterable<Film> films = filmRepository.findAll();
+        films.forEach(Film::getActors);
+
+        films.forEach(System.out::println);
+
+        model.addAttribute("films", films);
         return "film";
     }
     /* Design time method */

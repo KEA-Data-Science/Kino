@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <title>Kino :: Simple Calendar</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>🎞 Kino 🎞 🎞 🎞🎞</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="jumbotron">
+        <div class="text-center text-uppercase ">
+            <h2>Booking Oversigt</h2>
+        </div>
+
+        <div class="container">
+            <table class="table table-hover table-striped " style="border: 1px solid #ddd">
+
+                <tr>
+                    <td>ID</td>
+                    <td>Kunde</td>
+                    <td>Show Rum</td>
+                    <td>Show Tid</td>
+                    <td>Film</td>
+                    <td>Betalt</td>
+                    <td>Redigér</td>
+                </tr>
+                <tr th:each="booking : ${bookings}">
+                    <td th:text="${booking.getId()}"></td>
+                    <td th:text="${booking.getCustomerName()}"></td>
+                    <td th:text="${booking.getShowRoom()}"></td>
+                    <td th:text="${booking.getShowTime()}"></td>
+                    <td th:text="${booking.getFilm().getTitle()}"></td>
+                    <td th:text="${booking.isPaid()}"></td>
+                    <td>
+                    <form action="/editBooking" method="post">
+                        <input type="hidden" th:id="${booking.getId()}" th:name="id" th:value="${booking.getId()}" >
+                        <input type="submit">
+                    </form>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

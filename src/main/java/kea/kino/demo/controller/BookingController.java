@@ -5,10 +5,7 @@ import kea.kino.demo.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Book;
 import java.sql.Date;
@@ -89,20 +86,39 @@ public class BookingController
             bookings = bookingRepository.findBookingsByCustomerNameContainingAndShowTimeBetween(customerName,
                                                                                                 earlyStamp, laterStamp);
         }
-
-
         return "**2";
     }
 
+
+    @PostMapping("/editBooking")
+    public String editBooking(@RequestParam int id,
+                              Model model)
+    {
+        model.addAttribute("booking", bookingRepository.findById(id).get());
+        return "simple-edit-booking";
+    }
+
     /* Update */
+    /* Gonna be written in the morn :) */
 
     /* Read All */
     @GetMapping("/calendar")
     public String displayAllBookings(Model model)
     {
-        model.addAttribute("bookings", bookingRepository.findAll());
+        ArrayList<Booking> bookings = new ArrayList<Booking>();
+        bookingRepository.findAll().forEach(bookings::add);
+
+        bookings.forEach(System.out::println);
+
+        model.addAttribute("bookings", bookings);
         return "calendar";
     }
 
-
+    /* this is so far just for testing purposes */
+    @GetMapping("/simple-calendar")
+    public String displayAllBookings_SimpleCalendar(Model model)
+    {
+        model.addAttribute("bookings",bookingRepository.findAll());
+        return "simple-calendar";
+    }
 }

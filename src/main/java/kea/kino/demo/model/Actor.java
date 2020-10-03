@@ -15,13 +15,13 @@ public class Actor
     public Actor(){ }
 
     @ManyToMany
-    Set<Film> playedIn;
+    Set<Film> films;
 
     public String name;
 
-    public Set<Film> getPlayedIn(){ return playedIn; }
+    public Set<Film> getFilms(){ return films; }
 
-    public void setPlayedIn(Set<Film> films){ this.playedIn = films; }
+    public void setFilms(Set<Film> films){ this.films = films; }
 
     public int getId()
     {
@@ -43,4 +43,12 @@ public class Actor
         this.name = name;
     }
 
+    @Override
+    public String toString()
+    {
+        return "Actor{" +
+               "actor_id=" + actor_id +
+               ", name='" + name + '\'' +
+               '}';
+    }
 }
