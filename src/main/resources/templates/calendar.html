@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang='en' xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang='en'  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset='utf-8' />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -26,37 +27,41 @@
 <script>0</script>
 <script th:inline="javascript">
     var calendar;
-    /*
+
     var message = [[${bookings}]];
-    alert(message.length);*/
+    alert(message.length);
 
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             eventDidMount: function (info) {
-                /*info.el.innerHTML = info.el.innerHTML +"<br>"+ message[info.event.id].film.category;
-                console.log(info.event.id)*/
-                $(info.el).append( "Genre: " + message[info.event.id].film.category);
-                $(info.el).append("<br/>" + "Play time: " + message[info.event.id].film.playTime);
+                //info.el.innerHTML = info.el.innerHTML +"<br>"+ message[info.event.id].film.category;
+                console.log(info.event.id);
+                //$(info.el).append( "Genre: " + message[info.event.id].film.category);
+                $(info.el).append("<br/>" + "Play time: " + message[info.event.id].showTime);
                 $(info.el).append("<br/>" + "<button onclick='showAlert(" + info.event.id +")'> Choose </button>");
 
 
 
             }
         });
-        /*for (var i = 0; i < message.length; i++)
+        for (var i = 0; i < message.length; i++)
         {
             alert(i);
-            calendar.addEvent({title : message[i].film.title,
-                date :  message[i].date,  display : "list-item}", id : i});
+            calendar.addEvent({title : "Star wars", date :  message[i].showTime,  display : "list-item}", id : i});
             console.log(message[i].date);
+            //message[i].film.title,
         }
-        */
+
         calendar.render();
 
     });
 
+    function showAlert(id)
+    {
+        alert(message[id].showTime)
+    }
 </script>
 </body>
 </html>
