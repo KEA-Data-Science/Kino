@@ -1,6 +1,7 @@
 package kea.kino.demo.controller;
 
 import kea.kino.demo.model.Film;
+import kea.kino.demo.repository.ActorRepository;
 import kea.kino.demo.repository.FilmRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,9 @@ import static org.mockito.Mockito.*;
 class HomeControllerTest
 {
     @Mock
-    FilmRepository repository;
+    FilmRepository filmRepository;
+    @Mock
+    ActorRepository actorRepository;
     @Mock
     Model model;
     HomeController homeController; // test subject
@@ -24,12 +27,15 @@ class HomeControllerTest
     void setUp()
     {
         // Prepare Data
-        repository = mock(FilmRepository.class);
+        filmRepository = mock(FilmRepository.class);
+        actorRepository = mock(ActorRepository.class);
         model = mock(Model.class);
         homeController = new HomeController();
-        homeController.setFilmRepository(repository);
+        homeController.setFilmRepository(filmRepository);
+        homeController.setActorRepository(actorRepository);
         // Prepare Method Responses
-        when(repository.findAll()).thenReturn(new ArrayList<Film>()); /* mock repository call */
+        when(filmRepository.findAll()).thenReturn(new ArrayList<Film>()); /* mock repository call */
+
     }
 
     @Test
@@ -37,7 +43,7 @@ class HomeControllerTest
     {
         homeController.index(model);
         /* verify that index(..) uses repository.findAll() once */
-        verify(repository, times(1)).findAll();
+        verify(filmRepository, times(1)).findAll();
         /* films attribute is added to model, once */
         verify(model, times(1)).addAttribute("films", new ArrayList<Film>());
         /* does method return right string? */

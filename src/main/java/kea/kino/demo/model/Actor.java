@@ -5,48 +5,41 @@ import java.util.Set;
 
 
 @Entity
-public class Actor {
-
+public class Actor
+{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int actor_id;
 
-    public Set<Film> getFilms()
+    public Actor(int actor_id, String name){ }
+    public Actor(){ }
+
+    @ManyToMany
+    Set<Film> playedIn;
+
+    public String name;
+
+    public Set<Film> getPlayedIn(){ return playedIn; }
+
+    public void setPlayedIn(Set<Film> films){ this.playedIn = films; }
+
+    public int getId()
     {
-        return films;
+        return actor_id;
     }
 
-    public void setFilms(Set<Film> films)
+    public void setId(int id)
     {
-        this.films = films;
+        this.actor_id = id;
     }
 
-    @ManyToMany (mappedBy = "actors")
-    Set<Film> films;
-
-    private String name;
-
-    public Actor(int id, String name) {
-
-    }
-
-    public Actor() {
-
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 

@@ -7,35 +7,41 @@ import java.util.Set;
 public class Film
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int id;
 
-    private String title;
-    private int playTime;
-    private String category;
+    @ManyToMany(mappedBy = "playedIn")
+    public Set<Actor> actors;
 
-    public Set<Actor> getActors()
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "film")
+    public Set<Booking> bookings;
+
+    public String title;
+    public int duration;
+    public String category;
+    public boolean visibleOnSite;
+
+
+    public Film(int id, String title, int duration, String category, boolean visibleOnSite)
     {
-        return actors;
+        this.id = id;
+        this.title = title;
+        this.duration = duration;
+        this.category = category;
     }
+
+    public Film(){ }
+
+    public Set<Actor> getActors(){ return actors; }
 
     public void setActors(Set<Actor> actors)
     {
         this.actors = actors;
     }
 
-    @ManyToMany
-    Set<Actor> actors;
+    public Set<Booking> getBookings(){ return bookings; }
 
-    public Film(int id, String title, int playTime, String category)
-    {
-        this.id = id;
-        this.title = title;
-        this.playTime = playTime;
-        this.category = category;
-    }
-
-    public Film(){ }
+    public void setBookings(Set<Booking> bookings){ this.bookings = bookings; }
 
     public int getId()
     {
@@ -57,14 +63,14 @@ public class Film
         this.title = title;
     }
 
-    public int getPlayTime()
+    public int getDuration()
     {
-        return playTime;
+        return duration;
     }
 
-    public void setPlayTime(int playTime)
+    public void setDuration(int playTime)
     {
-        this.playTime = playTime;
+        this.duration = playTime;
     }
 
     public String getCategory()
@@ -76,7 +82,5 @@ public class Film
     {
         this.category = category;
     }
-    /* list of actors - hvordan skal vi repræsentere dette?
-     * @OneToMany
-     * */
+
 }

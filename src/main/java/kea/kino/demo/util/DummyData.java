@@ -4,7 +4,6 @@ import kea.kino.demo.model.Actor;
 import kea.kino.demo.model.Film;
 import kea.kino.demo.repository.ActorRepository;
 import kea.kino.demo.repository.FilmRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class DummyData
         Film film = new Film();
         film.setTitle(name);
         film.setCategory(category);
-        film.setPlayTime(playTime);
+        film.setDuration(playTime);
         film.setActors(actorsSet);
 
         return film;
