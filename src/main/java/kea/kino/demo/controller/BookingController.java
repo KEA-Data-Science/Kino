@@ -97,11 +97,11 @@ public class BookingController
     /* Update */
 
     /* Read All */
-    @GetMapping("/**1")
+    @GetMapping("/calendar")
     public String displayAllBookings(Model model)
     {
         model.addAttribute("bookings", bookingRepository.findAll());
-        return "**1";
+        return "calendar";
     }
 
 

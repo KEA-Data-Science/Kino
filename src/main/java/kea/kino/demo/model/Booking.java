@@ -26,8 +26,11 @@ public class Booking
 
     public Booking(){ }
 
-    public Booking(int id, Timestamp showTime, int showRoom, boolean ticketPaid, int numberOfSeats)
+    public Booking( int id,String customerName, Timestamp showTime, int showRoom, boolean ticketPaid,
+                   int numberOfSeats,
+                   Film film)
     {
+        this.customerName = customerName;
         this.id = id;
         this.showTime = showTime;
         this.showRoom = showRoom;

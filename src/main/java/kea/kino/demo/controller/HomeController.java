@@ -1,7 +1,9 @@
 package kea.kino.demo.controller;
 
 import kea.kino.demo.repository.ActorRepository;
+import kea.kino.demo.repository.BookingRepository;
 import kea.kino.demo.repository.FilmRepository;
+import kea.kino.demo.util.DummyData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,17 +20,26 @@ public class HomeController
     @Autowired
     private FilmRepository filmRepository;
 
+    @Autowired
+    private BookingRepository bookingRepository;
+
     @GetMapping("/")
     public String index(Model model)
     {
         model.addAttribute("films", filmRepository.findAll());
         return "film";
     }
-
-//    private void createDummyData(){
-//                DummyData data = new DummyData(actorRepository,filmRepository);
-//                data.createDummyData();
-//    }
+    /* Design time method */
+    @GetMapping("/datanow")
+    private String generatDummyData(){
+        createDummyData();
+        return "film";
+    }
+    /* Design time method */
+    private void createDummyData(){
+                DummyData data = new DummyData(actorRepository, filmRepository, bookingRepository);
+                data.createDummyData();
+    }
 
     public ActorRepository getActorRepository(){ return actorRepository; }
 
