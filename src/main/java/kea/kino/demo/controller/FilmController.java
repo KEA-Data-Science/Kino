@@ -59,7 +59,7 @@ public class FilmController
                              @RequestParam String title,
                              @RequestParam String category,
                              @RequestParam int duration,
-                             @RequestParam String visibleOnSite,
+                             @RequestParam(required=false) String visibleOnSite,
                              @RequestParam String actor1,
                              @RequestParam String actor2,
                              @RequestParam String actor3,
@@ -82,10 +82,13 @@ public class FilmController
             film.setActors(new HashSet<>()); /* creating film without actors, at first*/
         }
 
+        boolean visible = (visibleOnSite!=null&&visibleOnSite.equalsIgnoreCase("TRUE"));
+
+
         film.setTitle(title);
         film.setCategory(category);
         film.setDuration(duration);
-        film.setVisibleOnSite(visibleOnSite.equalsIgnoreCase("TRUE"));
+        film.setVisibleOnSite(visible);
 
 
 
