@@ -63,6 +63,8 @@ public class FilmController
                              @RequestParam String actor3,
                              Model model)
     {
+
+
         /* checking if actors exist and creating if they don't */
         Set<Actor> actors = findOrCreateActors(actor1, actor2, actor3);
 
@@ -83,6 +85,7 @@ public class FilmController
         /* add films to actors, now that it exists */
         for(Actor a : actors)
         {
+            if(a.getFilms()==null){a.setFilms(new HashSet<>());}
             a.getFilms().add(updatedFilm);
             actorRepository.save(a);
         }
@@ -97,6 +100,8 @@ public class FilmController
 
         for(String a : actors)
         {
+            if(a.length()<2){continue;}  /* checking if no actor name was entered */
+
             Actor actor = actorRepository.findActorByNameContaining(a);
             /* if actor exists, utilize */
             if(actor != null){ actorSet.add(actor); } else
@@ -111,5 +116,4 @@ public class FilmController
         }
         return actorSet;
     }
-
 }

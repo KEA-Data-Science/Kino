@@ -23,10 +23,8 @@ public class HomeController
 {
     @Autowired
     private ActorRepository actorRepository;
-
     @Autowired
     private FilmRepository filmRepository;
-
     @Autowired
     private BookingRepository bookingRepository;
 
@@ -34,22 +32,18 @@ public class HomeController
     public String index(Model model)
     {
         Iterable<Film> films = filmRepository.findAll();
-//        films.forEach((f)-> f.getActors() );
-//
-//        for(Film f : films)
-//        {
-//           Set<Film> thisFilmSet = new HashSet<>();
-//           thisFilmSet.add(f);
-//           Set<Actor> actorSet = actorRepository.findActorsByFilmsContaining(thisFilmSet);
-//           f.setActors(actorSet);
-//        }
-
 
         System.out.println("Printing Films just before they are show in GALLERY");
         films.forEach(System.out::println);
 
         model.addAttribute("films", films);
         return "film";
+    }
+
+    @GetMapping("/employee-splash-page")
+    public String employeeSplashPage()
+    {
+        return "employee-splash-page";
     }
 
     /* Design time method */
