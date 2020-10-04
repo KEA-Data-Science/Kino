@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Kino :: create booking</title>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1>🎞 Kino 🎞 🎞 🎞🎞</h1>
+    </div>
+</div>
+<div class="container">
+    <div class="jumbotron">
+        <div class="text-center text-uppercase ">
+            <h2>Create a booking</h2>
+        </div>
+
+        <div class="container">
+            <form action="/saveBooking" method="post">
+                <table class="table table-hover table-striped " style="border: 1px solid #ddd">
+                    <tr>
+                        <td>Kunde</td>
+                        <td>
+                            <input type="text" id="customerName" name="customerName">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Show Rum</td>
+                        <td>
+                            <input type="number" id="showRoom" name="showRoom">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Antal sæder</td>
+                        <td>
+                            <input type="number" id="numberOfSeats" name="numberOfSeats">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Show Dato</td>
+                        <td>
+                            <input type="date" id="date" name="date">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Show Time</td>
+                        <td>
+                            <input type="number" id="hour" name="hour">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Show Minut</td>
+                        <td>
+                            <input type="number" id="minute" name="minute">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Film</td>
+                        <td>
+                            <label for="filmID">Vælg film:</label>
+                            <select id="filmID" name="filmID">
+                                <th:block th:each="film : ${films}">
+                                    <option th:value="${film.getId()}" th:text="${film.getTitle()}"></option>
+                                </th:block>
+                            </select>
+                        </td>
+                    </tr>
+
+                </table>
+                <input type="submit" value="Create">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
