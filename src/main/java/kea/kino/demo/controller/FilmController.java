@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -47,7 +48,7 @@ public class FilmController
     public String editFilm(@RequestParam int filmID,
                            Model model)
     {
-        model.addAttribute("films", filmRepository.findById(filmID));
+        model.addAttribute("film", filmRepository.findById(filmID).get());
         return "edit-film";
     }
 
