@@ -31,7 +31,7 @@ public class HomeController
     @GetMapping("/")
     public String index(Model model)
     {
-        Iterable<Film> films = filmRepository.findAll();
+        Iterable<Film> films = filmRepository.findFilmsByVisibleOnSiteTrue();
 
         System.out.println("Printing Films just before they are show in GALLERY");
         films.forEach(System.out::println);

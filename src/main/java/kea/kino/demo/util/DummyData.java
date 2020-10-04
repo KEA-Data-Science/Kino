@@ -87,6 +87,9 @@ public class DummyData
         film.setDuration(playTime);
         film.setActors(actorsSet);
 
+        Random genie = new Random();
+        film.setVisibleOnSite(genie.nextBoolean());
+
         System.out.println(film.toString());
 
         Film saved = filmRepository.save(film);
