@@ -2,7 +2,9 @@ package kea.kino.demo.controller;
 
 import kea.kino.demo.model.Booking;
 import kea.kino.demo.repository.BookingRepository;
+import kea.kino.demo.repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,17 +13,17 @@ import java.awt.print.Book;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class BookingController
 {
     @Autowired
     BookingRepository bookingRepository;
+    @Autowired
+    FilmRepository filmRepository;
 
     /* Create */
     /* Read */
@@ -94,11 +96,49 @@ public class BookingController
     public String editBooking(@RequestParam int id,
                               Model model)
     {
+        /* tænker at vi kan tilføje 'film' til modellen her, hvis vi vil have en dropdown
+         * liste med film:*/
+//        model.addAttribute("films",filmRepository.findFilmsByVisibleOnSiteTrue());
+
         model.addAttribute("booking", bookingRepository.findById(id).get());
         return "simple-edit-booking";
     }
 
     /* Update */
+    @PostMapping("/updateBooking")
+    public String saveEditedBooking(@RequestParam int id,
+                                    @RequestParam int showRoom,
+                                    @RequestParam String customerName,
+                                    @RequestParam int numberOfSeats,
+                                    @RequestParam boolean isPaid,
+                                    @RequestParam int hour, /* image: in form, drop down 0-24*/
+                                    @RequestParam int minute, /* image: in form, drop down 0-60 */
+                                    @RequestParam Date date /* image: data field */
+                                   )
+    {
+        Optional<Booking> possibleBookingbyId = bookingRepository.findById(id);/* fetching booking */
+        if(possibleBookingbyId.isPresent())
+        {
+            Booking booking = possibleBookingbyId.get();
+            booking.setShowRoom(showRoom);
+            booking.setCustomerName(customerName);
+            booking.setNumberOfSeats(numberOfSeats);
+            booking.setPaid(isPaid);
+
+            LocalDate lDate = date.toLocalDate(); /* converting split up date and timey data to timestamp for db*/
+            Timestamp newShowtimeStamp = Timestamp.valueOf(LocalDateTime.of(lDate.getYear(),
+                                                                            lDate.getMonth(),
+                                                                            lDate.getDayOfMonth(),
+                                                                            hour,
+                                                                            minute));
+            booking.setShowTime(newShowtimeStamp);
+            bookingRepository.save(booking); /* saving booking back to db */
+        }
+
+        return "simple-calendar";
+    }
+
+
     /* Gonna be written in the morn :) */
 
     /* Read All */
@@ -118,7 +158,11 @@ public class BookingController
     @GetMapping("/simple-calendar")
     public String displayAllBookings_SimpleCalendar(Model model)
     {
-        model.addAttribute("bookings",bookingRepository.findAll());
+        ArrayList<Booking> bookings = new ArrayList<Booking>();
+        bookingRepository.findAll().forEach(bookings::add);
+        bookings.sort(Booking::compareTo);
+//        bookings.sort((o1, o2) -> o1.compareTo(o2));  // sort med lambda
+        model.addAttribute("bookings", bookings);
         return "simple-calendar";
     }
 }

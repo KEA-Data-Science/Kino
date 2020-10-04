@@ -12,4 +12,5 @@ import java.util.Set;
 public interface FilmRepository extends CrudRepository<Film,Integer>
 {
     List<Film> findFilmsByTitleContaining(String title);
+    List<Film> findFilmsByVisibleOnSiteTrue();
 }
