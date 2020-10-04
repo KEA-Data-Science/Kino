@@ -71,15 +71,24 @@ public class FilmController
         Set<Actor> actors = findOrCreateActors(actor1, actor2, actor3);
 
         Film film = new Film();
+        if(filmID != -1)
+        {
+//            film.setId(filmID);
+            Optional<Film> optionalFilm = filmRepository.findById(filmID);
+            if(optionalFilm.isPresent()){film = optionalFilm.get();}
+
+        } else
+        {
+            film.setActors(new HashSet<>()); /* creating film without actors, at first*/
+        }
+
         film.setTitle(title);
         film.setCategory(category);
         film.setDuration(duration);
-
-        film.setActors(new HashSet<>()); /* creating film without actors, at first*/
-
-        if(filmID != -1){ film.setId(filmID); }
-
         film.setVisibleOnSite(visibleOnSite.equalsIgnoreCase("TRUE"));
+
+
+
 
         Film updatedFilm = filmRepository.save(film);
 
@@ -87,6 +96,8 @@ public class FilmController
         for(Actor a : actors)
         {
             if(a.getFilms() == null){a.setFilms(new HashSet<>());}
+            if(updatedFilm.getActors()==null){updatedFilm.setActors(new HashSet<>());}
+
             a.getFilms().add(updatedFilm);
 
             Actor savedActor = actorRepository.save(a);
