@@ -34,21 +34,37 @@ public class BookingController
     /* Read All */
     /* Update */
 
+    @GetMapping("/createBooking")
+    public String createBooking(Model model)
+    {
+        model.addAttribute("films", filmRepository.findAll());
+
+        return "create-booking";
+    }
+
 
     /* Create */
-    @PostMapping("/createBooking")
-    public String createBooking(@ModelAttribute Booking newBooking,
-                                @ModelAttribute Date date,
-                                @ModelAttribute int hour,
-                                @ModelAttribute int minute,
-
-                                Model model)
+    @PostMapping("/saveBooking")
+    public String saveBooking(@RequestParam String customerName,
+                              @RequestParam int showRoom,
+                              @RequestParam int numberOfSeats,
+                              @RequestParam int filmID,
+                              @RequestParam String date,
+                              @RequestParam int hour,
+                              @RequestParam int minute)
     {
-        Timestamp stamp = assembleTimeStamp(date, hour, minute);
-        /* update timestamp */
-        newBooking.setShowTime(stamp);
+        Booking booking = new Booking();
 
-        bookingRepository.save(newBooking);
+        booking.setCustomerName(customerName);
+        booking.setShowRoom(showRoom);
+        booking.setNumberOfSeats(numberOfSeats);
+        booking.setFilm(filmRepository.findById(filmID).get());
+
+        /* update timestamp */
+        Timestamp bookingTime = assembleTimeStamp(Date.valueOf(date), hour, minute);
+        booking.setShowTime(bookingTime);
+
+        bookingRepository.save(booking);
 
         return "redirect:/calendar";
     }
@@ -73,7 +89,7 @@ public class BookingController
         Iterable<Film> filmsByVisibleOnSiteTrue = filmRepository.findAll();
         System.out.println("Films brought along to edit: " + filmsByVisibleOnSiteTrue.iterator().toString());
 
-        model.addAttribute("films",filmsByVisibleOnSiteTrue);
+        model.addAttribute("films", filmsByVisibleOnSiteTrue);
 
         model.addAttribute("booking", bookingRepository.findById(id).get());
         return "simple-edit-booking";
@@ -98,8 +114,8 @@ public class BookingController
         boolean isPaidBool = isPaidString.equalsIgnoreCase("TRUE");
 
         /* finding film */
-       Film possibleFilm = filmRepository.findById(film).get();
-       /*should null check, but data PASSAGE IS SAFE */
+        Film possibleFilm = filmRepository.findById(film).get();
+        /*should null check, but data PASSAGE IS SAFE */
 
         Optional<Booking> possibleBookingbyId = bookingRepository.findById(id);/* fetching booking */
         if(possibleBookingbyId.isPresent())
@@ -136,7 +152,7 @@ public class BookingController
         bookingRepository.findAll().forEach(bookings::add);
         List<String> titles = new ArrayList<>();
 
-        for (Booking b : bookings)
+        for(Booking b : bookings)
         {
             titles.add(b.getFilm().getTitle());
             b.setFilm(new Film());
