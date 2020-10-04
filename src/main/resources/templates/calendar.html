@@ -31,8 +31,11 @@
     var message = [[${bookings}]];
     alert(message.length);
 
+
+
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
+
         calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             eventDidMount: function (info) {

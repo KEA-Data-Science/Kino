@@ -150,6 +150,8 @@ public class BookingController
 
         bookings.forEach(System.out::println);
 
+        for(Booking b : bookings) { b.getFilm().setBookings(new HashSet<>()); }
+
         model.addAttribute("bookings", bookings);
         return "calendar";
     }
