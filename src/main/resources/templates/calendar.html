@@ -2,11 +2,13 @@
 <html lang='en'  xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset='utf-8' />
+
+    <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.css">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script>
+    <title>Overview</title>
 
 </head>
 <body>
@@ -16,52 +18,48 @@
     </div>
 </div>
 <div class="container">
-    <div style="display: table;">
-        <div style="width: 100%; height: 1000%; display: table-row;">
-            <div id='calendar' style="display: table-cell; width: 1500px; height: 650px"></div>
-            <div class="container" style="background-color: red; display: table-cell;"><button> Klik her</button></div>
-        </div>
+
+
+
+    <button style="display: inline;">Create booking</button>
+
+
+    <div style= "width: 100%; height: 100%;">
+        <br>
+        <div id="calendar" style="width: 100%; height: 100%;"></div>
     </div>
+
 </div>
 
-<script>0</script>
 <script th:inline="javascript">
     var calendar;
 
     var message = [[${bookings}]];
-    alert(message.length);
-
-
+    var titles = [[${titles}]];
+    var titlesMessage = [];
 
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
-
         calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             eventDidMount: function (info) {
-                //info.el.innerHTML = info.el.innerHTML +"<br>"+ message[info.event.id].film.category;
-                console.log(info.event.id);
-                //$(info.el).append( "Genre: " + message[info.event.id].film.category);
-                $(info.el).append("<br/>" + "Play time: " + message[info.event.id].showTime);
-                $(info.el).append("<br/>" + "<button onclick='showAlert(" + info.event.id +")'> Choose </button>");
+
+                $(info.el).append("<b style='color : black;'>Title :</b> : <br><span style='color : black;'>" + titles[info.event.id] +"</span><br>");
+                $(info.el).append("<b style='color : black;'>Name :</b> : <br><span style='color : black;'>" + message[info.event.id].customerName +"</span><br>");
+                $(info.el).append("<form action=\'editBooking?id=" + message[info.event.id].id +   "\' method=\'post\'> <button>Choose</button></form>");
+
             }
         });
         for (var i = 0; i < message.length; i++)
         {
-            alert(i);
-            calendar.addEvent({title : "Star wars", date :  message[i].showTime,  display : "list-item}", id : i});
-            console.log(message[i].date);
-            //message[i].film.title,
+            calendar.addEvent({date :  message[i].showTime,  display : "block", id : i});
+
         }
 
         calendar.render();
 
     });
-
-    function showAlert(id)
-    {
-        alert(message[id].showTime)
-    }
 </script>
+
 </body>
 </html>
