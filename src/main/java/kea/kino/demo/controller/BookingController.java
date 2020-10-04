@@ -184,7 +184,7 @@ public class BookingController
         bookingRepository.delete(bookingRepository.findById(id).get());
 
         model.addAttribute("bookings", bookingRepository.findAll());
-        return "/simple-calendar";
+        return "/calendar";
     }
 
     /* Read */
