@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -69,7 +70,6 @@ public class FilmController
         /* checking if actors exist and creating if they don't */
         Set<Actor> actors = findOrCreateActors(actor1, actor2, actor3);
 
-
         Film film = new Film();
         film.setTitle(title);
         film.setCategory(category);
@@ -86,9 +86,12 @@ public class FilmController
         /* add films to actors, now that it exists */
         for(Actor a : actors)
         {
-            if(a.getFilms()==null){a.setFilms(new HashSet<>());}
+            if(a.getFilms() == null){a.setFilms(new HashSet<>());}
             a.getFilms().add(updatedFilm);
-            actorRepository.save(a);
+
+            Actor savedActor = actorRepository.save(a);
+            updatedFilm.getActors().add(savedActor);
+            filmRepository.save(updatedFilm);
         }
 
         model.addAttribute("films", filmRepository.findAll());
@@ -101,7 +104,7 @@ public class FilmController
 
         for(String a : actors)
         {
-            if(a.length()<2){continue;}  /* checking if no actor name was entered */
+            if(a.length() < 2){continue;}  /* checking if no actor name was entered */
 
             Actor actor = actorRepository.findActorByNameContaining(a);
             /* if actor exists, utilize */
