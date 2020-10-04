@@ -20,9 +20,9 @@
 <div class="container">
 
 
-
-    <button style="display: inline;">Create booking</button>
-
+    <form action="/createBooking">
+    <button class="btn-info btn-lg" style="display: inline;">Create booking</button>
+    </form>
 
     <div style= "width: 100%; height: 100%;">
         <br>
@@ -36,7 +36,6 @@
 
     var message = [[${bookings}]];
     var titles = [[${titles}]];
-    var titlesMessage = [];
 
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -44,8 +43,8 @@
             initialView: 'dayGridMonth',
             eventDidMount: function (info) {
 
-                $(info.el).append("<b style='color : black;'>Title :</b> : <br><span style='color : black;'>" + titles[info.event.id] +"</span><br>");
-                $(info.el).append("<b style='color : black;'>Name :</b> : <br><span style='color : black;'>" + message[info.event.id].customerName +"</span><br>");
+                $(info.el).append("<b style='color : black;'>Movie title :</b> : <br><span style='color : black;'>" + titles[info.event.id] +"</span><br>");
+                $(info.el).append("<b style='color : black;'>Customer name :</b> : <br><span style='color : black;'>" + message[info.event.id].customerName +"</span><br>");
                 $(info.el).append("<form action=\'editBooking?id=" + message[info.event.id].id +   "\' method=\'post\'> <button>Choose</button></form>");
 
             }
