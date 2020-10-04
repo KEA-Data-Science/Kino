@@ -43,7 +43,7 @@ public class Film
 
     public Film(){ }
 
-    @ManyToMany(mappedBy = "films")
+//    @ManyToMany(mappedBy = "films")
     public Set<Actor> getActors(){ return actors; }
 
     public void setActors(Set<Actor> actors)
