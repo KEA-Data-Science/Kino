@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang='en' xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script>
+    <title>Medarbejder Film Oversigt :: Kino </title>
+</head>
+<body>
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>🎞 Kino 🎞 🎞 🎞🎞</h1>
+    </div>
+</div>
+
+<div class="container">
+    <table class="table table-hover table-striped " style="border: 1px solid #ddd">
+
+        <tr>
+            <td>Navn</td>
+            <td>Kategory</td>
+            <td>Spilletid</td>
+            <td>Skuespillere</td>
+            <td>Redigér</td>
+        </tr>
+        <tr th:each="film : ${films}">
+            <td th:text="${film.getTitle()}"></td>
+            <td th:text="${film.getCategory()}"></td>
+
+            <td th:text="${film.getDuration()}"></td>
+            <td>
+                        <span th:each="actor :${ film.actors }">
+                        <span th:text="${actor.getName() + ', '}"></span>
+                        </span>
+            </td>
+            <td>
+                <form action="/edit-film" method="post">
+                    <input type="hidden" th:id="${film.getId()}" name="filmID" th:value="${film.getId()}">
+                    <input type="submit" value="Redigér">
+                </form>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+</body>
+</html>

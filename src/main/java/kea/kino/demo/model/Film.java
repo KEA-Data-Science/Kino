@@ -21,6 +21,15 @@ public class Film
     public String category;
     public boolean visibleOnSite;
 
+    public boolean isVisibleOnSite()
+    {
+        return visibleOnSite;
+    }
+
+    public void setVisibleOnSite(boolean visibleOnSite)
+    {
+        this.visibleOnSite = visibleOnSite;
+    }
 
     public Film(int id, String title, int duration, String category, boolean visibleOnSite)
     {
