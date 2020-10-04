@@ -1,11 +1,16 @@
 package kea.kino.demo.controller;
 
+import kea.kino.demo.model.Actor;
 import kea.kino.demo.model.Film;
+import kea.kino.demo.repository.ActorRepository;
 import kea.kino.demo.repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class supplies CRUD functionality in a straightforward fashion
@@ -15,6 +20,8 @@ public class FilmController
 {
     @Autowired
     FilmRepository filmRepository;
+    @Autowired
+    ActorRepository actorRepository;
 
     /* Create */
     /* Read */
@@ -22,14 +29,9 @@ public class FilmController
     /* Update */
 
     /* Create */
-    @RequestMapping(value = "/create-film", method = RequestMethod.POST)
-    public String createFilm(@ModelAttribute("newFilm") Film film, Model model)
+    @RequestMapping(value = "/create-film", method = RequestMethod.GET)
+    public String createFilm()
     {
-        /* create/save film in db */
-        Film savedFilm = filmRepository.save(film);
-        /* adding saved film back to model to be propagated. */
-        model.addAttribute("savedFilm", savedFilm); // NOTE TO TEAM: DO WE WANT THIS?
-
         return "create-film"; // name not decided; page displaying newly saved film confirmation
     }
 
@@ -43,28 +45,71 @@ public class FilmController
 
     @PostMapping("/edit-film")
     public String editFilm(@RequestParam int filmID,
-            Model model)
+                           Model model)
     {
-        model.addAttribute("films",filmRepository.findById(filmID));
+        model.addAttribute("films", filmRepository.findById(filmID));
         return "edit-film";
     }
 
     /* Update */
     @RequestMapping(value = "/saveFilm", method = RequestMethod.POST)
-    public String updateFilm(@RequestParam String title,
+    public String updateFilm(@RequestParam int filmID,
+                             @RequestParam String title,
                              @RequestParam String category,
                              @RequestParam int duration,
+                             @RequestParam String visibleOnSite,
+                             @RequestParam String actor1,
+                             @RequestParam String actor2,
+                             @RequestParam String actor3,
                              Model model)
     {
+        /* checking if actors exist and creating if they don't */
+        Set<Actor> actors = findOrCreateActors(actor1, actor2, actor3);
+
+
         Film film = new Film();
         film.setTitle(title);
         film.setCategory(category);
         film.setDuration(duration);
-        film.setVisibleOnSite(false);
+
+        film.setActors(new HashSet<>()); /* creating film without actors, at first*/
+
+        if(filmID != -1){ film.setId(filmID); }
+
+        film.setVisibleOnSite(visibleOnSite.equalsIgnoreCase("TRUE"));
 
         Film updatedFilm = filmRepository.save(film);
-        model.addAttribute("updatedFilm", updatedFilm);
+
+        /* add films to actors, now that it exists */
+        for(Actor a : actors)
+        {
+            a.getFilms().add(updatedFilm);
+            actorRepository.save(a);
+        }
+
+        model.addAttribute("films", filmRepository.findAll());
         return "employee-film-overview";
+    }
+
+    private Set<Actor> findOrCreateActors(String... actors)
+    {
+        Set<Actor> actorSet = new HashSet<>();
+
+        for(String a : actors)
+        {
+            Actor actor = actorRepository.findActorByNameContaining(a);
+            /* if actor exists, utilize */
+            if(actor != null){ actorSet.add(actor); } else
+            {
+                /* else create and pass along */
+                actor = new Actor();
+                actor.setName(a);
+                actor = actorRepository.save(actor);
+
+                actorSet.add(actor);
+            }
+        }
+        return actorSet;
     }
 
 }
