@@ -36,7 +36,7 @@ public class BookingController
 
 
     /* Create */
-    @PostMapping("/**1")
+    @PostMapping("/createBooking")
     public String createBooking(@ModelAttribute Booking newBooking,
                                 @ModelAttribute Date date,
                                 @ModelAttribute int hour,
@@ -47,9 +47,10 @@ public class BookingController
         Timestamp stamp = assembleTimeStamp(date, hour, minute);
         /* update timestamp */
         newBooking.setShowTime(stamp);
-        Booking createdBooking = bookingRepository.save(newBooking);
-        model.addAttribute("createdBooking", createdBooking); // saved booking brought along for verification;
-        return "**1";
+
+        bookingRepository.save(newBooking);
+
+        return "redirect:/calendar";
     }
 
     private Timestamp assembleTimeStamp(Date date, int hour, int minute)
@@ -62,47 +63,17 @@ public class BookingController
         return Timestamp.valueOf(LocalDateTime.of(earlyYear, earlyMonth, earlyDayOfMonth, hour, minute));
     }
 
-    /* Read */
-    @PostMapping("/**2")
-    public String findBookingsByCustomerNameAndShowTime(@ModelAttribute String customerName,
-                                                        @ModelAttribute Date earlyDate,
-                                                        @ModelAttribute int earlyDateHour,
-                                                        @ModelAttribute int earlyDateMinute,
-                                                        @ModelAttribute Date laterDate,
-                                                        @ModelAttribute int laterDateHour,
-                                                        @ModelAttribute int laterDateMinute,
-                                                        Model model)
-    {
-        /* idea: same controller method used whether user fills in name or not, we simply null-check and
-         * search without customer name / dates (if dates are 'equal' - or earlyDate is 'later' than
-         * laterDate, they are discarded)*/
-
-        /* convert from incoming model data to java java.sql.TimeStamp, mappable directly to SQL TIMESTAMP */
-        Timestamp earlyStamp = assembleTimeStamp(earlyDate, earlyDateHour, earlyDateMinute);
-        Timestamp laterStamp = assembleTimeStamp(laterDate, laterDateHour, laterDateMinute);
-
-        List<Booking> bookings = new ArrayList<>();
-
-        /* if no name supplied, search only for dates */
-        if(customerName.length() < 1)
-        {
-            bookings = bookingRepository.findBookingsByShowTimeBetween(earlyStamp, laterStamp);
-        } else
-        {
-            bookings = bookingRepository.findBookingsByCustomerNameContainingAndShowTimeBetween(customerName,
-                                                                                                earlyStamp, laterStamp);
-        }
-        return "**2";
-    }
-
-
     @PostMapping("/editBooking")
     public String editBooking(@RequestParam int id,
                               Model model)
     {
         /* tænker at vi kan tilføje 'film' til modellen her, hvis vi vil have en dropdown
          * liste med film:*/
-        model.addAttribute("films", filmRepository.findFilmsByVisibleOnSiteTrue());
+//        List<Film> filmsByVisibleOnSiteTrue = filmRepository.findFilmsByVisibleOnSiteTrue();
+        Iterable<Film> filmsByVisibleOnSiteTrue = filmRepository.findAll();
+        System.out.println("Films brought along to edit: " + filmsByVisibleOnSiteTrue.iterator().toString());
+
+        model.addAttribute("films",filmsByVisibleOnSiteTrue);
 
         model.addAttribute("booking", bookingRepository.findById(id).get());
         return "simple-edit-booking";
@@ -117,15 +88,18 @@ public class BookingController
                                     @RequestParam Optional<String> isPaid,
                                     @RequestParam int hour, /* image: in form, drop down 0-24*/
                                     @RequestParam int minute, /* image: in form, drop down 0-60 */
-                                    @RequestParam String date /* image: data field */
-//                                    , @RequestParam Film film
-                                    )
+                                    @RequestParam String date, /* image: data field */
+                                    @RequestParam int film,
+                                    Model model)
     {
         String isPaidString = "FALSE";
         /*checking if string for isPaid is present and reacting*/
         if(isPaid.isPresent()){ isPaidString = isPaid.get(); }
         boolean isPaidBool = isPaidString.equalsIgnoreCase("TRUE");
 
+        /* finding film */
+       Film possibleFilm = filmRepository.findById(film).get();
+       /*should null check, but data PASSAGE IS SAFE */
 
         Optional<Booking> possibleBookingbyId = bookingRepository.findById(id);/* fetching booking */
         if(possibleBookingbyId.isPresent())
@@ -137,18 +111,18 @@ public class BookingController
             booking.setPaid(isPaidBool);
 
             LocalDate lDate = Date.valueOf(date).toLocalDate(); /* converting split up date and timey data to
-            timestamp
-            for db*/
+            timestamp For db*/
             Timestamp newShowtimeStamp = Timestamp.valueOf(LocalDateTime.of(lDate.getYear(),
                                                                             lDate.getMonth(),
                                                                             lDate.getDayOfMonth(),
                                                                             hour,
                                                                             minute));
             booking.setShowTime(newShowtimeStamp);
+            booking.setFilm(possibleFilm);
             bookingRepository.save(booking); /* saving booking back to db */
         }
 
-        return "simple-calendar";
+        return "redirect:/calendar";
     }
 
 
@@ -180,8 +154,9 @@ public class BookingController
     {
         ArrayList<Booking> bookings = new ArrayList<Booking>();
         bookingRepository.findAll().forEach(bookings::add);
+
         bookings.sort(Booking::compareTo);
-//        bookings.sort((o1, o2) -> o1.compareTo(o2));  // sort med lambda
+
         model.addAttribute("bookings", bookings);
         return "simple-calendar";
     }
@@ -195,5 +170,38 @@ public class BookingController
         model.addAttribute("bookings", bookingRepository.findAll());
         return "/simple-calendar";
     }
+
+    /* Read */
+//    @PostMapping("/**2")
+//    public String findBookingsByCustomerNameAndShowTime(@ModelAttribute String customerName,
+//                                                        @ModelAttribute Date earlyDate,
+//                                                        @ModelAttribute int earlyDateHour,
+//                                                        @ModelAttribute int earlyDateMinute,
+//                                                        @ModelAttribute Date laterDate,
+//                                                        @ModelAttribute int laterDateHour,
+//                                                        @ModelAttribute int laterDateMinute,
+//                                                        Model model)
+//    {
+//        /* idea: same controller method used whether user fills in name or not, we simply null-check and
+//         * search without customer name / dates (if dates are 'equal' - or earlyDate is 'later' than
+//         * laterDate, they are discarded)*/
+//
+//        /* convert from incoming model data to java java.sql.TimeStamp, mappable directly to SQL TIMESTAMP */
+//        Timestamp earlyStamp = assembleTimeStamp(earlyDate, earlyDateHour, earlyDateMinute);
+//        Timestamp laterStamp = assembleTimeStamp(laterDate, laterDateHour, laterDateMinute);
+//
+//        List<Booking> bookings = new ArrayList<>();
+//
+//        /* if no name supplied, search only for dates */
+//        if(customerName.length() < 1)
+//        {
+//            bookings = bookingRepository.findBookingsByShowTimeBetween(earlyStamp, laterStamp);
+//        } else
+//        {
+//            bookings = bookingRepository.findBookingsByCustomerNameContainingAndShowTimeBetween(customerName,
+//                                                                                                earlyStamp, laterStamp);
+//        }
+//        return "**2";
+//    }
 }
 
