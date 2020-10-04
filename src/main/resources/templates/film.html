@@ -41,7 +41,7 @@
                         <!--                <td th:text="${film.actors}"> </td> -->
                         <!-- if single 'CSV' string OR if list -->
                         <td>
-                        <span th:each="actor :${ film.actors}">
+                        <span th:each="actor :${ film.getActors()}">
                         <span th:text="${actor.getName() + ', '}"></span>
                         </span>
                         </td>

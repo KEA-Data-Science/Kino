@@ -1,5 +1,6 @@
 package kea.kino.demo.controller;
 
+import kea.kino.demo.model.Actor;
 import kea.kino.demo.model.Film;
 import kea.kino.demo.repository.ActorRepository;
 import kea.kino.demo.repository.BookingRepository;
@@ -11,10 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Home controller handles requests for pages immediately available to cinema goers/customers
- * */
+ */
 @Controller
 public class HomeController
 {
@@ -31,23 +34,37 @@ public class HomeController
     public String index(Model model)
     {
         Iterable<Film> films = filmRepository.findAll();
-        films.forEach(Film::getActors);
+//        films.forEach((f)-> f.getActors() );
+//
+//        for(Film f : films)
+//        {
+//           Set<Film> thisFilmSet = new HashSet<>();
+//           thisFilmSet.add(f);
+//           Set<Actor> actorSet = actorRepository.findActorsByFilmsContaining(thisFilmSet);
+//           f.setActors(actorSet);
+//        }
 
+
+        System.out.println("Printing Films just before they are show in GALLERY");
         films.forEach(System.out::println);
 
         model.addAttribute("films", films);
         return "film";
     }
+
     /* Design time method */
     @GetMapping("/datanow")
-    private String generatDummyData(){
+    private String generatDummyData()
+    {
         createDummyData();
         return "film";
     }
+
     /* Design time method */
-    private void createDummyData(){
-                DummyData data = new DummyData(actorRepository, filmRepository, bookingRepository);
-                data.createDummyData();
+    private void createDummyData()
+    {
+        DummyData data = new DummyData(actorRepository, filmRepository, bookingRepository);
+        data.createDummyData();
     }
 
     public ActorRepository getActorRepository(){ return actorRepository; }
@@ -57,4 +74,6 @@ public class HomeController
     public FilmRepository getFilmRepository(){ return filmRepository; }
 
     public void setFilmRepository(FilmRepository filmRepository){ this.filmRepository = filmRepository; }
+
+
 }

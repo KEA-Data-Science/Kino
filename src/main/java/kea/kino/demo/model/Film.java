@@ -1,5 +1,7 @@
 package kea.kino.demo.model;
 
+import ch.qos.logback.core.boolex.EvaluationException;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -10,7 +12,7 @@ public class Film
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
 
-    @ManyToMany(mappedBy = "films")
+    @ManyToMany
     public Set<Actor> actors;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "film")
@@ -41,6 +43,7 @@ public class Film
 
     public Film(){ }
 
+    @ManyToMany(mappedBy = "films")
     public Set<Actor> getActors(){ return actors; }
 
     public void setActors(Set<Actor> actors)

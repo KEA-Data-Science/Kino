@@ -14,8 +14,8 @@ public class Actor
     public Actor(int actor_id, String name){ }
     public Actor(){ }
 
-    @ManyToMany
-    Set<Film> films;
+    @ManyToMany(mappedBy = "actors")
+    public Set<Film> films;
 
     public String name;
 
