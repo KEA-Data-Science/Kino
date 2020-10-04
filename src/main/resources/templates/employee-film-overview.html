@@ -26,6 +26,7 @@
             <td>Kategory</td>
             <td>Spilletid</td>
             <td>Skuespillere</td>
+            <td>Synlighed</td>
             <td>Redigér</td>
         </tr>
         <tr th:each="film : ${films}">
@@ -38,6 +39,7 @@
                         <span th:text="${actor.getName() + ', '}"></span>
                         </span>
             </td>
+            <td th:text="${film.isVisibleOnSite()}"></td>
             <td>
                 <form action="/edit-film" method="post">
                     <input type="hidden" th:id="${film.getId()}" name="filmID" th:value="${film.getId()}">

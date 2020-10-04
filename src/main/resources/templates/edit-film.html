@@ -35,21 +35,21 @@
                         <td>Film titel</td>
                         <td th:text="${film.getTitle()}"></td>
                         <td>
-                            <input type="text" id="title" name="title">
+                            <input type="text" id="title" name="title" th:value="${film.getTitle()}">
                         </td>
                     </tr>
                     <tr>
                         <td>Varighed i minutter</td>
                         <td th:text="${film.getDuration()}"></td>
                         <td>
-                            <input type="number" id="duration" name="duration">
+                            <input type="number" id="duration" name="duration" th:value="${film.getDuration()}">
                         </td>
                     </tr>
                     <tr>
                         <td>Kategori</td>
                         <td th:text="${film.getCategory()}"></td>
                         <td>
-                            <input type="text" id="category" name="category">
+                            <input type="text" id="category" name="category" th:value="${film.getCategory()}">
                         </td>
                     </tr>
                     <tr>
