@@ -1,9 +1,11 @@
 package kea.kino.demo.controller;
 
 import kea.kino.demo.model.Booking;
+import kea.kino.demo.model.Film;
 import kea.kino.demo.repository.BookingRepository;
 import kea.kino.demo.repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Book;
 import java.sql.Date;
+
+
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.time.LocalDate;
@@ -98,7 +102,7 @@ public class BookingController
     {
         /* tænker at vi kan tilføje 'film' til modellen her, hvis vi vil have en dropdown
          * liste med film:*/
-//        model.addAttribute("films",filmRepository.findFilmsByVisibleOnSiteTrue());
+        model.addAttribute("films", filmRepository.findFilmsByVisibleOnSiteTrue());
 
         model.addAttribute("booking", bookingRepository.findById(id).get());
         return "simple-edit-booking";
@@ -110,12 +114,19 @@ public class BookingController
                                     @RequestParam int showRoom,
                                     @RequestParam String customerName,
                                     @RequestParam int numberOfSeats,
-                                    @RequestParam boolean isPaid,
+                                    @RequestParam Optional<String> isPaid,
                                     @RequestParam int hour, /* image: in form, drop down 0-24*/
                                     @RequestParam int minute, /* image: in form, drop down 0-60 */
-                                    @RequestParam Date date /* image: data field */
-                                   )
+                                    @RequestParam String date /* image: data field */
+//                                    , @RequestParam Film film
+                                    )
     {
+        String isPaidString = "FALSE";
+        /*checking if string for isPaid is present and reacting*/
+        if(isPaid.isPresent()){ isPaidString = isPaid.get(); }
+        boolean isPaidBool = isPaidString.equalsIgnoreCase("TRUE");
+
+
         Optional<Booking> possibleBookingbyId = bookingRepository.findById(id);/* fetching booking */
         if(possibleBookingbyId.isPresent())
         {
@@ -123,9 +134,11 @@ public class BookingController
             booking.setShowRoom(showRoom);
             booking.setCustomerName(customerName);
             booking.setNumberOfSeats(numberOfSeats);
-            booking.setPaid(isPaid);
+            booking.setPaid(isPaidBool);
 
-            LocalDate lDate = date.toLocalDate(); /* converting split up date and timey data to timestamp for db*/
+            LocalDate lDate = Date.valueOf(date).toLocalDate(); /* converting split up date and timey data to
+            timestamp
+            for db*/
             Timestamp newShowtimeStamp = Timestamp.valueOf(LocalDateTime.of(lDate.getYear(),
                                                                             lDate.getMonth(),
                                                                             lDate.getDayOfMonth(),
@@ -147,12 +160,17 @@ public class BookingController
     {
         ArrayList<Booking> bookings = new ArrayList<Booking>();
         bookingRepository.findAll().forEach(bookings::add);
+        List<String> titles = new ArrayList<>();
 
-        bookings.forEach(System.out::println);
-
-        for(Booking b : bookings) { b.getFilm().setBookings(new HashSet<>()); }
+        for (Booking b : bookings)
+        {
+            titles.add(b.getFilm().getTitle());
+            b.setFilm(new Film());
+        }
 
         model.addAttribute("bookings", bookings);
+        model.addAttribute("titles", titles);
+
         return "calendar";
     }
 
@@ -167,4 +185,15 @@ public class BookingController
         model.addAttribute("bookings", bookings);
         return "simple-calendar";
     }
+
+    /*Delete */
+    @PostMapping("/deleteBooking")
+    public String deleteBooking(@RequestParam int id, Model model)
+    {
+        bookingRepository.delete(bookingRepository.findById(id).get());
+
+        model.addAttribute("bookings", bookingRepository.findAll());
+        return "/simple-calendar";
+    }
 }
+

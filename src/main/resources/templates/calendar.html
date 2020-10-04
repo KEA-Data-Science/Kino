@@ -44,9 +44,6 @@
                 //$(info.el).append( "Genre: " + message[info.event.id].film.category);
                 $(info.el).append("<br/>" + "Play time: " + message[info.event.id].showTime);
                 $(info.el).append("<br/>" + "<button onclick='showAlert(" + info.event.id +")'> Choose </button>");
-
-
-
             }
         });
         for (var i = 0; i < message.length; i++)

@@ -111,10 +111,12 @@ public class DummyData
 
         if(maybeFilm.isPresent())
         {
+            Random random = new Random();
+
             Booking booking =
                     new Booking(0, customerName,
                                 Timestamp.valueOf(
-                                        LocalDateTime.now().plusHours(hour).minusMinutes(minute)),
+                                        LocalDateTime.now().plusHours(hour).minusMinutes(minute).plusDays(random.nextInt(10))),
                                 showRoom,
                                 paid,
                                 numberOfSeats,

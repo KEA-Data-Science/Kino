@@ -26,6 +26,15 @@
         </div>
 
         <div class="container">
+            <form action="/deleteBooking" method="post" >
+                <tr>
+                    <td>
+                        <input type="hidden" th:id="${booking.getId()}" th:name="id" th:value="${booking.getId()}">
+                        <input type="submit" th:text="Delete">
+                    </td>
+                </tr>
+            </form>
+
             <form action="/updateBooking" method="post">
                 <table class="table table-hover table-striped " style="border: 1px solid #ddd">
 
@@ -47,6 +56,13 @@
                         <td th:text="${booking.getShowRoom()}"></td>
                         <td>
                         <input type="number" id="showRoom" name="showRoom" th:value="${booking.getShowRoom()}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Antal sæder</td>
+                        <td th:text="${booking.getNumberOfSeats()}"></td>
+                        <td>
+                        <input type="number" id="numberOfSeat" name="numberOfSeats" th:value="${booking.getNumberOfSeats()}">
                         </td>
                     </tr>
                     <tr>
@@ -73,12 +89,20 @@
                     <tr>
                         <td>Film</td>
                         <td th:text="${booking.getFilm().getTitle()}"></td>
+                        <td>
+                            <select name="film">
+                                <div th:each="film :${ films}">
+                                    <option th:value="film" th:text="${film.getTitle()}"></option>
+                                </div>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <td>Betalt</td>
                         <td th:text="${booking.isPaid()}"></td>
                         <td>
-                            <input type="checkbox" id="isPaid" name="isPaid" th:value="${booking.isPaid() ? 1 : 0}">
+<!--                            <input type="checkbox" id="isPaid" name="isPaid" th:value="${booking.isPaid() ? 'TRUE' : 'FALSE'}" default="FALSE">-->
+                            <input type="checkbox" id="isPaid" name="isPaid" th:checked="${booking.isPaid()}" th:value="${'TRUE'}">
                         </td>
                     </tr>
 
@@ -88,6 +112,7 @@
                             <input type="submit">
                         </td>
                     </tr>
+
 
                 </table>
             </form>
