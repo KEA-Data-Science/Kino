@@ -84,7 +84,6 @@ public class FilmController
 
         boolean visible = (visibleOnSite!=null&&visibleOnSite.equalsIgnoreCase("TRUE"));
 
-
         film.setTitle(title);
         film.setCategory(category);
         film.setDuration(duration);

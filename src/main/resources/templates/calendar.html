@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang='en'  xmlns="http://www.w3.org/1999/xhtml"
+<html lang='en' xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
 
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.css">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script>
     <title>Overview</title>
@@ -17,14 +21,30 @@
         <h1>🎞 Kino 🎞 🎞 🎞🎞</h1>
     </div>
 </div>
+
 <div class="container">
 
+    <div class="container">
+        <div class="d-flex justify-content-around">
+            <div class="">
+                <form action="/createBooking">
+                    <button class="btn-info btn-lg">Create booking</button>
+                    <!--    <button class="btn-info btn-lg" style="display: inline;">Create booking</button>-->
+                </form>
+            </div>
+            <div class="">
+                <div>
+                    <span>Søg bookinng:</span>
+                    <form action="/search-bookings" method="post">
+                        <input type="text" id="searchBooking" name="customerName">
+                    </form>
+                </div>
 
-    <form action="/createBooking">
-    <button class="btn-info btn-lg" style="display: inline;">Create booking</button>
-    </form>
+            </div>
+        </div>
+    </div>
 
-    <div style= "width: 100%; height: 100%;">
+    <div style="width: 100%; height: 100%;">
         <br>
         <div id="calendar" style="width: 100%; height: 100%;"></div>
     </div>
@@ -37,21 +57,20 @@
     var message = [[${bookings}]];
     var titles = [[${titles}]];
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
         calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             eventDidMount: function (info) {
 
-                $(info.el).append("<b style='color : black;'>Movie title :</b> : <br><span style='color : black;'>" + titles[info.event.id] +"</span><br>");
-                $(info.el).append("<b style='color : black;'>Customer name :</b> : <br><span style='color : black;'>" + message[info.event.id].customerName +"</span><br>");
-                $(info.el).append("<form action=\'editBooking?id=" + message[info.event.id].id +   "\' method=\'post\'> <button>Choose</button></form>");
+                $(info.el).append("<b style='color : black;'>Movie title :</b> : <br><span style='color : black;'>" + titles[info.event.id] + "</span><br>");
+                $(info.el).append("<b style='color : black;'>Customer name :</b> : <br><span style='color : black;'>" + message[info.event.id].customerName + "</span><br>");
+                $(info.el).append("<form action=\'editBooking?id=" + message[info.event.id].id + "\' method=\'post\'> <button>Choose</button></form>");
 
             }
         });
-        for (var i = 0; i < message.length; i++)
-        {
-            calendar.addEvent({date :  message[i].showTime,  display : "block", id : i});
+        for (var i = 0; i < message.length; i++) {
+            calendar.addEvent({date: message[i].showTime, display: "block", id: i});
 
         }
 

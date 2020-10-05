@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang='en' xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script>
+    <title>Booking Søge Resultater</title>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1>🎞 Kino 🎞 🎞 🎞🎞</h1>
+            <h4>Oversigt over fundne bookinger</h4>
+    </div>
+</div>
+
+<div class="container">
+    <div class="jumbotron">
+        <div class="text-center text-uppercase ">
+            <h3 th:text="${'Fandt ' + bookings.size() + ' bookinger for ' + searchString}"></h3>
+        </div>
+
+        <div class="container">
+            <table class="table table-hover table-striped " style="border: 1px solid #ddd">
+
+                <tr>
+                    <td>ID</td>
+                    <td>Kunde</td>
+                    <td>Show Rum</td>
+                    <td>Show Tid</td>
+                    <td>Film</td>
+                    <td>Betalt</td>
+                    <td>Redigér</td>
+                </tr>
+                <tr th:each="booking : ${bookings}">
+                    <td th:text="${booking.getId()}"></td>
+                    <td th:text="${booking.getCustomerName()}"></td>
+                    <td th:text="${booking.getShowRoom()}"></td>
+                    <td th:text="${booking.getShowTime()}"></td>
+                    <td th:text="${booking.getFilm().getTitle()}"></td>
+                    <td th:text="${booking.isPaid()}"></td>
+                    <td>
+                        <form action="/editBooking" method="post">
+                            <input type="hidden" th:id="${booking.getId()}" th:name="id" th:value="${booking.getId()}">
+                            <input type="submit">
+                        </form>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

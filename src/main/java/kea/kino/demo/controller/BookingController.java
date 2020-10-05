@@ -187,6 +187,19 @@ public class BookingController
         return "/calendar";
     }
 
+    @PostMapping("/search-bookings")
+    public String searchBookingByCustomerName(@RequestParam String customerName,
+            Model model)
+    {
+        List<Booking> bookings = bookingRepository.findBookingsByCustomerNameContaining(customerName);
+
+        bookings.sort(Booking::compareTo);
+
+        model.addAttribute("searchString",customerName);
+        model.addAttribute("bookings",bookings);
+        return "booking-search-results";
+    }
+
     /* Read */
 //    @PostMapping("/**2")
 //    public String findBookingsByCustomerNameAndShowTime(@ModelAttribute String customerName,
