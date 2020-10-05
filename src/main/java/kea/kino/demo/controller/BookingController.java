@@ -149,19 +149,25 @@ public class BookingController
     public String displayAllBookings(Model model)
     {
         ArrayList<Booking> bookings = new ArrayList<Booking>();
-        bookingRepository.findAll().forEach(bookings::add);
         List<String> titles = new ArrayList<>();
+        prepareBookingsforCalendar(bookings,titles);
+
+
+        model.addAttribute("bookings", bookings);
+        model.addAttribute("titles", titles);
+
+        return "calendar";
+    }
+
+    private void prepareBookingsforCalendar(ArrayList<Booking> bookings, List<String> titles)
+    {
+        bookingRepository.findAll().forEach(bookings::add);
 
         for(Booking b : bookings)
         {
             titles.add(b.getFilm().getTitle());
             b.setFilm(new Film());
         }
-
-        model.addAttribute("bookings", bookings);
-        model.addAttribute("titles", titles);
-
-        return "calendar";
     }
 
     /* this is so far just for testing purposes */
@@ -183,20 +189,25 @@ public class BookingController
     {
         bookingRepository.delete(bookingRepository.findById(id).get());
 
+        ArrayList<Booking> bookings = new ArrayList<>();
+        List<String> titles = new ArrayList<>();
+        prepareBookingsforCalendar(bookings,titles);
+
+        model.addAttribute("titles",titles);
         model.addAttribute("bookings", bookingRepository.findAll());
         return "/calendar";
     }
 
     @PostMapping("/search-bookings")
     public String searchBookingByCustomerName(@RequestParam String customerName,
-            Model model)
+                                              Model model)
     {
         List<Booking> bookings = bookingRepository.findBookingsByCustomerNameContaining(customerName);
 
         bookings.sort(Booking::compareTo);
 
-        model.addAttribute("searchString",customerName);
-        model.addAttribute("bookings",bookings);
+        model.addAttribute("searchString", customerName);
+        model.addAttribute("bookings", bookings);
         return "booking-search-results";
     }
 
