@@ -2,9 +2,11 @@ package kea.kino.demo.util;
 
 import kea.kino.demo.model.Actor;
 import kea.kino.demo.model.Booking;
+import kea.kino.demo.model.Employee;
 import kea.kino.demo.model.Film;
 import kea.kino.demo.repository.ActorRepository;
 import kea.kino.demo.repository.BookingRepository;
+import kea.kino.demo.repository.EmployeeRepository;
 import kea.kino.demo.repository.FilmRepository;
 import org.springframework.stereotype.Component;
 
@@ -19,12 +21,14 @@ public class DummyData
     FilmRepository filmRepository;
     ActorRepository actorRepository;
     BookingRepository bookingRepository;
+    EmployeeRepository employeeRepository;
 
-    public DummyData(ActorRepository actorRepository, FilmRepository filmRepository,BookingRepository bookingRepository)
+    public DummyData(ActorRepository actorRepository, FilmRepository filmRepository,BookingRepository bookingRepository, EmployeeRepository employeeRepository)
     {
         this.actorRepository = actorRepository;
         this.filmRepository = filmRepository;
         this.bookingRepository = bookingRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     public void createDummyData()
@@ -73,6 +77,10 @@ public class DummyData
             createBooking("Casper Blodtud", 1, 15, 1, true, 1, 7);
             createBooking("Sudan Olé", 3, 15, 1, true, 1, 2);
         }
+
+        createEmployee("Grøntsags-Lene");
+        createEmployee("Erdinger Bwent");
+        createEmployee("Svend-Åge Qwent");
     }
 
     private Film createFilm(String name, String category, int playTime, Actor... actors)
@@ -131,6 +139,16 @@ public class DummyData
         }else{
             System.out.println("Film was not present.");
         }
+    }
+
+
+    private Employee createEmployee(String name){
+        Employee emp = new Employee();
+        emp.setName(name);
+
+        employeeRepository.save(emp);
+
+        return emp;
     }
 
 }
