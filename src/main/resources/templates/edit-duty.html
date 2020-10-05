@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang='en'  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script>
+    <title>Rediger Vagt :: Kino</title>
+
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1>🎞 Kino 🎞 🎞 🎞🎞</h1>
+        <h2> Redigér Vagt Informationer</h2>
+    </div>
+</div>
+<div class="container">
+    <div class="jumbotron">
+        <div class="text-center text-uppercase ">
+            <h2>Rediger Vagt</h2>
+        </div>
+
+        <div class="container">
+            <form action="/save-duty" method="post">
+                <table class="table table-hover table-striped " style="border: 1px solid #ddd">
+                    <tr>
+                        <input type="hidden" id="id" name="id" th:value="${shift.getId()}">
+                    </tr>
+                    <tr>
+                        <td>Vagt dato</td>
+                        <td th:text="${shift.getDate()}"></td>
+                        <td>
+                            <label for="date" class="font-weight-bold">Vælg dato:</label>
+                            <input type="text" id="date" name="date" th:value="${shift.getDate().toString()}" th:default="${shift.getDate().toString()}">
+                            <span class="font-weight-bolder">(skal udfyldes)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Medarbejder</td>
+                        <td><input type="number" name ="employeeID" th:value="${shift.getEmployee().getId()}">
+                    </tr>
+                </table>
+                <input type="submit" value="Edit">
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

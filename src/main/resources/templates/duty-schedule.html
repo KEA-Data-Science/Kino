@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <title>Kino :: Vagtplan</title>
+</head>
+<body style="margin-top: 30px">
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>🎞 Kino 🎞 🎞 🎞🎞</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="text-center text-uppercase ">
+        <h2>Vagtplan</h2>
+    </div>
+    <div style="margin-bottom: 10px">
+        <a href="/create-duty"><button>Tilføj ny vagt</button></a>
+    </div>
+        <table class="table table-hover table-striped " style="border: 1px solid #ddd">
+            <tr>
+                <td>Tidspunkt</td>
+                <td>Medarbejdere</td>
+                <td>Redigér</td>
+
+            </tr>
+            <tr th:each="shift : ${shifts}">
+                <td th:text="${shift.getDate()}"></td>
+                <td th:text="${shift.getEmployee().getName()}"> </td>
+                <td>
+                    <form action="/edit-duty" method="post">
+                        <input type="hidden" name="id" th:value="${shift.getId()}">
+                        <input type="submit" value="Redigér">
+                    </form>
+                </td>
+            </tr>
+        </table>
+</div>
+
+</body>
+</html>
