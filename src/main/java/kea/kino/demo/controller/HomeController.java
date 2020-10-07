@@ -4,6 +4,7 @@ import kea.kino.demo.model.Actor;
 import kea.kino.demo.model.Film;
 import kea.kino.demo.repository.ActorRepository;
 import kea.kino.demo.repository.BookingRepository;
+import kea.kino.demo.repository.EmployeeRepository;
 import kea.kino.demo.repository.FilmRepository;
 import kea.kino.demo.util.DummyData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class HomeController
     private FilmRepository filmRepository;
     @Autowired
     private BookingRepository bookingRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @GetMapping("/")
     public String index(Model model)
@@ -57,7 +60,7 @@ public class HomeController
     /* Design time method */
     private void createDummyData()
     {
-        DummyData data = new DummyData(actorRepository, filmRepository, bookingRepository);
+        DummyData data = new DummyData(actorRepository, filmRepository, bookingRepository, employeeRepository);
         data.createDummyData();
     }
 
