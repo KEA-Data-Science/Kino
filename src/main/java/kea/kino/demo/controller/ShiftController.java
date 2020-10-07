@@ -64,7 +64,7 @@ public class ShiftController {
 
         shiftRepository.save(shift);
 
-        return "duty-schedule";
+        return "redirect:/dutySchedule";
     }
 
 
